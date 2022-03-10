@@ -1,0 +1,47 @@
+﻿@page "/editcategory/{categoryID}"
+
+@inject NavigationManager NavigationManager
+@inject IEditCategoryUseCase EditCategoryUseCase
+@inject IGetCategoryByIdUseCase GetCategoryByIdUseCase
+<h3>修改类别</h3>
+@if (category != null)
+{
+    <EditForm Model="category" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+        <div class="form-group">
+            <label for="name">名称</label>
+            <InputText id="name" @bind-Value="category.Name" class="form-control">@category.Name</InputText>
+        </div>
+        <div class="form-group">
+            <label for="description">描述</label>
+            <InputText id="description" @bind-Value="category.Description" class="form-control">@category.Description</InputText>
+        </div>
+        <button type="submit" class="btn btn-primary">保存</button>
+        <button type="button" class="btn btn-primary" @onclick="OnCancel">取消</button>
+    </EditForm>
+}
+@code {
+    [Parameter]
+    public string categoryID { get; set; }
+    private Category category;
+   
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (int.TryParse(this.categoryID, out int categoryIDInt))
+        {
+            var cat = GetCategoryByIdUseCase.Execute(categoryIDInt);
+            this.category = new Category { CategoryID = cat.CategoryID, Name = cat.Name, Description = cat.Description };
+        }
+    }
+    private void OnValidSubmit()
+    {
+        EditCategoryUseCase.Execute(category);
+        NavigationManager.NavigateTo("/categories");
+    }
+    private void OnCancel()
+    {
+        NavigationManager.NavigateTo("/categories");
+    }
+}

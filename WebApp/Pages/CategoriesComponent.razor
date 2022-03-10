@@ -1,0 +1,61 @@
+﻿@page "/categories"
+@inject NavigationManager NavigationManage
+@inject IViewCategoriesUseCase ViewCategoriesUseCase
+@inject IDeleteCategoryUseCase DeleteCategoryUseCase
+<h3>类别管理</h3>
+
+@if (categories != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>描述</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in categories)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <button type="button" class="btn btn-link" @onclick="@(()=>EditCategory(item))">修改</button>
+                        <button type="button" class="btn btn-link" @onclick="@(()=>DeleteCategory(item.CategoryID))">删除</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+<br />
+<button type="button" @onclick="OnClickAddCategory" class="btn btn-primary">添加分类</button>
+@code {
+    private List<Category> categories;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        loadCategories();
+    }
+    private void OnClickAddCategory()
+    {
+        NavigationManage.NavigateTo("addcategory");
+    }
+
+    private void EditCategory(Category category)
+    {
+        NavigationManage.NavigateTo($"/editcategory/{category.CategoryID}");
+    }
+
+    private void DeleteCategory(int id)
+    {
+        DeleteCategoryUseCase.Delete(id);
+        loadCategories();
+    }
+    private void loadCategories()
+    {
+        this.categories = ViewCategoriesUseCase.Execute()?.ToList();
+    }
+}
