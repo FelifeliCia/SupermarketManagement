@@ -1,0 +1,24 @@
+﻿@page "/cashierconsole"
+<h3>收银台</h3>
+<br />
+<div class="row">
+    <div class="col ">
+        <SelectProductForSallingComponent OnProductsSelected="SelectProduct"></SelectProductForSallingComponent>
+        <SellProductComponent OnProductsSold="SellProduct" SelectedProduct="@SelectedProduct"></SellProductComponent>
+    </div>
+    <div class="col">
+        占位
+    </div>
+</div>
+@code {
+    private Product SelectedProduct;
+    private void SelectProduct(Product product)
+    {
+        this.SelectedProduct = product;
+    }
+
+    private void SellProduct(Product product)
+    {
+
+    }
+}

@@ -17,8 +17,9 @@ namespace Plugins.DataStore.InMemory
             products = new List<Product>
             {
                 new Product{ProductId=1,CategoryId=1,Name="鸡肉",Quantity=100,Price=1.99},
-                new Product{ProductId=2,CategoryId=2,Name="土豆",Quantity=200,Price=4.5},
-                new Product{ProductId=3,CategoryId=3,Name="西兰花",Quantity=3000,Price=1.2},
+                new Product{ProductId=2,CategoryId=1,Name="牛肉",Quantity=150,Price=3.99},
+                new Product{ProductId=3,CategoryId=2,Name="土豆",Quantity=200,Price=4.5},
+                new Product{ProductId=4,CategoryId=3,Name="西兰花",Quantity=3000,Price=1.2},
             };
         }
 
@@ -63,6 +64,11 @@ namespace Plugins.DataStore.InMemory
         public void DeleteProduct(int productID)
         {
             products.Remove(GetProductByID(productID));
+        }
+
+        public IEnumerable<Product> GetProductsByCategoryId(int categoryId)
+        {
+            return this.products.Where(x => x.CategoryId == categoryId);
         }
     }
 }

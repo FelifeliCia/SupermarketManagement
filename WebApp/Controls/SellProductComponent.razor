@@ -1,0 +1,71 @@
+﻿@inject IGetProductByIdUseCase GetProductByIdUseCase
+@inject ISellProductUseCase SellProductUseCase
+@if (productToSell != null)
+{
+    <EditForm Model="productToSell" OnValidSubmit="SellProduct">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+        <div class="form-group">
+            <label for="name">名称</label>
+            <input type="text" id="name" readonly value="@productToSell.Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="quantity">价格</label>
+            <Input type="text" id="quantity" readonly value="@(string.Format("{0:c}",productToSell.Price))" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="quantity">库存</label>
+            <InputNumber id="quantity" @bind-Value="productToSell.Quantity" class="form-control">@productToSell.Quantity</InputNumber>
+        </div>
+        <button type="submit" class="btn btn-primary">卖出</button>
+    </EditForm>
+    @if (!string.IsNullOrEmpty(errorMsg))
+    {
+        <div class="alert alert-danger">@errorMsg</div>
+    }
+}
+@code {
+    private Product productToSell;
+    private string errorMsg;
+    [Parameter]
+    public Product SelectedProduct { get; set; }
+    [Parameter]
+    public EventCallback<Product> OnProductsSold { get; set; }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (SelectedProduct != null)
+        {
+            productToSell = new Product
+            {
+                ProductId = SelectedProduct.ProductId,
+                Name = SelectedProduct.Name,
+                Price = SelectedProduct.Price,
+                CategoryId = SelectedProduct.CategoryId,
+                Quantity = 0
+            };
+        }
+        else
+        {
+            productToSell = null;
+        }
+    }
+    private void SellProduct()
+    {
+        var product = GetProductByIdUseCase.Execute(productToSell.ProductId);
+        if (product.Quantity >= productToSell.Quantity)
+        {
+            OnProductsSold.InvokeAsync(productToSell);
+            errorMsg = string.Empty;
+            SellProductUseCase.Execute(product.ProductId, productToSell.Quantity);
+        }
+        else if (product.Quantity < 0)
+        {
+            errorMsg = $"库存为0";
+        }
+        else
+        {
+            errorMsg = $"库存不足，请输入低于或等于{product.Quantity}的数字";
+        }
+    }
+}
