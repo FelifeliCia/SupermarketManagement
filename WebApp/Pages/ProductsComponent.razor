@@ -1,0 +1,59 @@
+﻿@page "/viewproducts"
+@inject NavigationManager NavigationManager
+@inject IViewProductsUseCase ViewProductsUseCase
+@inject IGetCategoryByIdUseCase GetCategoryByIdUseCase
+@inject IDeleteProductUseCase DeleteProductUseCase
+<h3>产品</h3>
+@if (products != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>产品类别</th>
+                <th>产品名称</th>
+                <th>产品重量</th>
+                <th>产品价格</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in products)
+            {
+                <tr>
+                    <th>@GetCategoryByIdUseCase.Execute(item.CategoryId.Value).Name</th>
+                    <th>@item.Name</th>
+                    <th>@item.Quantity</th>
+                    <th>@(Math.Round(item.Price,2))</th>
+                    <th><button type="button" class="btn btn-link" @onclick="(()=>OnClickUpdate(item))">修改</button></th>
+                    <th><button type="button" class="btn btn-link" @onclick="(()=>OnClickDelete(item.ProductId))">删除</button></th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<br />
+<button type="button" @onclick="OnClickAddProdecy" class="btn btn-primary">添加产品</button>
+@code {
+    private IEnumerable<Product> products;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        LoadProducts();
+    }
+    private void OnClickAddProdecy()
+    {
+        NavigationManager.NavigateTo("/addproduct");
+    }
+    private void OnClickUpdate(Product product)
+    {
+        NavigationManager.NavigateTo($"/editproduct/{product.ProductId}");
+    }
+    private void OnClickDelete(int id)
+    {
+        DeleteProductUseCase.Delete(id);
+        LoadProducts();
+    }
+    private void LoadProducts()
+    {
+        this.products = ViewProductsUseCase.Execute();
+    }
+}
