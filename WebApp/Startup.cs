@@ -36,9 +36,15 @@ namespace WebApp
             services.AddSingleton<WeatherForecastService>();
             services.AddDbContext<MarketContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             //内存数据仓库的依赖注入
-            services.AddScoped<ICategoryRepository, CategoryInMemoryRepository>();
-            services.AddScoped<IProductRepository, ProductInMemoryRepository>();
+            //services.AddScoped<ICategoryRepository, CategoryInMemoryRepository>();
+            //services.AddScoped<IProductRepository, ProductInMemoryRepository>();
+            //services.AddScoped<ITransactionRepository, TransactionInMemoryRepository>();
+
+            //EF数据仓库的依赖注入
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             //用例的依赖注入

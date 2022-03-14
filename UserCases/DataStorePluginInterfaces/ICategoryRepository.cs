@@ -10,10 +10,10 @@ namespace UseCases.DataStorePluginInterfaces
     //类别仓库
     public interface ICategoryRepository
     {
-        IEnumerable<Category> GetCategories();
-        void AddCategory(Category category);
-        void UpdateCategory(Category category);
-        Category GetCategory(int id);
-        void DeleteCategory(int categoryID);
+        public IEnumerable<Category> GetCategories();
+        public void AddCategory(Category category);
+        public void UpdateCategory(Category category);
+        public Category GetCategory(int id);
+        public void DeleteCategory(int categoryID);
     }
 }
