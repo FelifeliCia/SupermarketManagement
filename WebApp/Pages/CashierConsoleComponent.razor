@@ -1,17 +1,42 @@
 ﻿@page "/cashierconsole"
-<h3>收银台</h3>
+<div class="row">
+    <div class="col-7"><h3>收银台</h3></div>
+    <div class="col">收银员：</div>
+    <div class="col">
+        <div class="form-group">
+            <input type="text" id="cashier" class="col" @bind-value="cashierName" />
+        </div>
+    </div>
+</div>
 <br />
 <div class="row">
-    <div class="col ">
+    <div class="col-4">
         <SelectProductForSallingComponent OnProductsSelected="SelectProduct"></SelectProductForSallingComponent>
-        <SellProductComponent OnProductsSold="SellProduct" SelectedProduct="@SelectedProduct"></SellProductComponent>
+        <SellProductComponent CashierName="@cashierName"
+                              OnProductsSold="SellProduct"
+                              SelectedProduct="@SelectedProduct"></SellProductComponent>
     </div>
     <div class="col">
-        占位
+        <TodayTransactionsComponent @ref="todayTransactionsComponent"></TodayTransactionsComponent>
     </div>
 </div>
 @code {
     private Product SelectedProduct;
+    private string cashierName;
+    private TodayTransactionsComponent todayTransactionsComponent;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        //没有解决切换页面后再次点击交易记录消失的问题
+        if (firstRender)
+        {
+            todayTransactionsComponent.LoadTransactions(cashierName);
+        }
+    }
     private void SelectProduct(Product product)
     {
         this.SelectedProduct = product;
@@ -19,6 +44,6 @@
 
     private void SellProduct(Product product)
     {
-
+        todayTransactionsComponent.LoadTransactions(cashierName);
     }
 }

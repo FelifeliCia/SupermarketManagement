@@ -1,5 +1,6 @@
 ﻿@inject IGetProductByIdUseCase GetProductByIdUseCase
 @inject ISellProductUseCase SellProductUseCase
+@inject IRecordTransactionUseCase RecordTransactionUseCase
 @if (productToSell != null)
 {
     <EditForm Model="productToSell" OnValidSubmit="SellProduct">
@@ -28,6 +29,8 @@
     private Product productToSell;
     private string errorMsg;
     [Parameter]
+    public string CashierName { get; set; }
+    [Parameter]
     public Product SelectedProduct { get; set; }
     [Parameter]
     public EventCallback<Product> OnProductsSold { get; set; }
@@ -52,12 +55,19 @@
     }
     private void SellProduct()
     {
+        if (string.IsNullOrEmpty(CashierName))
+        {
+            errorMsg = $"收银员为空";
+            return;
+        }
         var product = GetProductByIdUseCase.Execute(productToSell.ProductId);
         if (product.Quantity >= productToSell.Quantity)
         {
-            OnProductsSold.InvokeAsync(productToSell);
             errorMsg = string.Empty;
             SellProductUseCase.Execute(product.ProductId, productToSell.Quantity);
+            RecordTransactionUseCase.Excute(CashierName, product.ProductId, productToSell.Quantity);
+            OnProductsSold.InvokeAsync(productToSell);
+
         }
         else if (product.Quantity < 0)
         {

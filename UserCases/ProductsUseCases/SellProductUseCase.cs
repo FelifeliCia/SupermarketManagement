@@ -21,6 +21,7 @@ namespace UseCases
             if (product == null) return;
 
             product.Quantity -= qtyToSell;
+            productRepository.UpdateProduct(product);
         }
     }
 }

@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Plugins.DataStore.InMemory;
+using Plugins.DataStore.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +34,12 @@ namespace WebApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddDbContext<MarketContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //内存数据仓库的依赖注入
             services.AddScoped<ICategoryRepository, CategoryInMemoryRepository>();
             services.AddScoped<IProductRepository, ProductInMemoryRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             //用例的依赖注入
             services.AddTransient<IViewCategoriesUseCase, ViewCategoriesUseCase>();
@@ -49,6 +54,9 @@ namespace WebApp
             services.AddTransient<IDeleteProductUseCase, DeleteProductUseCase>();
             services.AddTransient<IViewProductByCategoryId, ViewProductByCategoryId>();
             services.AddTransient<ISellProductUseCase, SellProductUseCase>();
+            services.AddTransient<IRecordTransactionUseCase, RecordTransactionUseCase>();
+            services.AddTransient<IGetTodayTransactionUseCase, GetTodayTransactionUseCase>();
+            services.AddTransient<IGetTransactionsUseCase, GetTransactionsUseCase>();
         }
 
 
