@@ -1,17 +1,28 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
-@inject NavigationManager Navigation
-<AuthorizeView>
-    <Authorized>
-        <a href="Identity/Account/Manage">@context.User.Identity.Name</a>
-        <form action="Identity/Account/Logout?returnUrl=%2f" method="post">
-            <button type="submit" class="nav-link btn btn-link">登出</button>
-        </form>
-    </Authorized>
-    <NotAuthorized>
-        <a href="Identity/Account/Register">注册</a>
-        <a href="Identity/Account/Login">登录</a>
-    </NotAuthorized>
-</AuthorizeView>
+
+<div class="navbar-nav">
+    <div class="nav-item">
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="row">
+                    <a href="Identity/Account/Manage" class="nav-link px-3">@context.User.Identity.Name</a>
+                    <form action="Identity/Account/Logout?returnUrl=%2f" method="post">
+                        <button type="submit" class="nav-link btn btn-link">登出</button>
+                    </form>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="row">
+                    <a href="Identity/Account/Register" class="nav-link px-3">注册</a>
+                    <a href="Identity/Account/Login" class="nav-link px-3">登录</a>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+
+    </div>
+</div>
+
 @code {
 
 }
