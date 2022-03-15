@@ -1,4 +1,5 @@
 ﻿using CoreBusiness;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Plugins.DataStore.Sql
             if (string.IsNullOrEmpty(cashierName))
                 return db.Transactions.ToList();
             else
-                return db.Transactions.Where(x => x.CashierName.ToLower()==cashierName.ToLower()).ToList();
+                return db.Transactions.Where(x => EF.Functions.Like(x.CashierName, $"%{cashierName}%")).ToList();
         }
 
         public IEnumerable<Transaction> GetByDate(string cashierName, DateTime date)
@@ -31,7 +32,7 @@ namespace Plugins.DataStore.Sql
                 return db.Transactions.Where(x => x.TimeStamp.Date == date).ToList();
             else
                 return db.Transactions.Where(x =>
-                x.CashierName.ToLower() == cashierName.ToLower()
+                EF.Functions.Like(x.CashierName, $"%{cashierName}%")
                 && x.TimeStamp.Date == date.Date).ToList();
 
         }
@@ -42,7 +43,7 @@ namespace Plugins.DataStore.Sql
                 return db.Transactions.Where(x => x.TimeStamp.Date >= startDate.Date && x.TimeStamp.Date <= endDate.Date.AddDays(1).Date).ToList();
             else
                 return db.Transactions.Where(x =>
-                x.CashierName.ToLower() == cashierName.ToLower()
+                EF.Functions.Like(x.CashierName, $"%{cashierName}%")
                 && x.TimeStamp.Date >= startDate.Date && x.TimeStamp.Date <= endDate.Date.AddDays(1).Date).ToList();
         }
 

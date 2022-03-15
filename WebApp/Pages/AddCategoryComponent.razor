@@ -1,5 +1,5 @@
 ﻿@page "/addcategory"
-
+@attribute [Authorize(Policy ="AdminOnly")]
 @inject NavigationManager NavigationManager
 @inject IAddCategoryUseCase AddCategoryUseCase
 <h3>添加类别</h3>

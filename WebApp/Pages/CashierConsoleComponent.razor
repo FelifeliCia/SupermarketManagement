@@ -1,29 +1,41 @@
 ﻿@page "/cashierconsole"
-<div class="row">
-    <div class="col-7"><h3>收银台</h3></div>
-    <div class="col">收银员：</div>
-    <div class="col">
-        <div class="form-group">
-            <input type="text" id="cashier" class="col" @bind-value="cashierName" />
+@attribute [Authorize(Policy = "CashierOnly")]
+@if (!string.IsNullOrWhiteSpace(cashierName))
+{
+    <div class="row">
+        <div class="col-7"><h3>收银台</h3></div>
+        <div class="col">收银员：</div>
+        <div class="col">
+            <div class="form-group">
+                <input type="text" id="cashier" class="col" @bind-value="cashierName" />
+            </div>
         </div>
     </div>
-</div>
-<br />
-<div class="row">
-    <div class="col-4">
-        <SelectProductForSallingComponent OnProductsSelected="SelectProduct"></SelectProductForSallingComponent>
-        <SellProductComponent CashierName="@cashierName"
+    <br />
+    <div class="row">
+        <div class="col-4">
+            <SelectProductForSallingComponent OnProductsSelected="SelectProduct"></SelectProductForSallingComponent>
+            <SellProductComponent CashierName="@cashierName"
                               OnProductsSold="SellProduct"
                               SelectedProduct="@SelectedProduct"></SellProductComponent>
+        </div>
+        <div class="col">
+            <TodayTransactionsComponent @ref="todayTransactionsComponent"></TodayTransactionsComponent>
+        </div>
     </div>
-    <div class="col">
-        <TodayTransactionsComponent @ref="todayTransactionsComponent"></TodayTransactionsComponent>
-    </div>
-</div>
+}
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
+    private AuthenticationState authState;
     private Product SelectedProduct;
     private string cashierName;
     private TodayTransactionsComponent todayTransactionsComponent;
+    protected override async Task OnInitializedAsync()
+    {
+        authState = await _authState;
+        cashierName = authState.User.Identity.Name;
+    }
     protected override void OnInitialized()
     {
         base.OnInitialized();
