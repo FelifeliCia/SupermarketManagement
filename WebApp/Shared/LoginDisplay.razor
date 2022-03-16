@@ -1,21 +1,30 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
-
+<style>
+    .box {
+        width: auto;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content:center;
+    }
+</style>
 <div class="navbar-nav">
-    <div class="nav-item">
+    <div class="nav-item ">
 
         <AuthorizeView>
             <Authorized>
                 <div class="row">
-                    <a href="Identity/Account/Manage" class="nav-link px-3">@context.User.Identity.Name</a>
-                    <form action="Identity/Account/Logout?returnUrl=%2f" method="post">
+                    <a href="Identity/Account/Manage" class="nav-link px-2 my-2">@context.User.Identity.Name</a>
+                    <form action="Identity/Account/Logout?returnUrl=%2f" method="post" class="box">
                         <button type="submit" class="nav-link btn btn-link">登出</button>
                     </form>
+
                 </div>
             </Authorized>
             <NotAuthorized>
-                <div class="row">
-                    <a href="Identity/Account/Register" class="nav-link px-3">注册</a>
-                    <a href="Identity/Account/Login" class="nav-link px-3">登录</a>
+                <div class="row ml-5">
+                    <a href="Identity/Account/Register" class="nav-link px-2 my-2">注册</a>
+                    <a href="Identity/Account/Login" class="nav-link px-2 my-2">登录</a>
                 </div>
             </NotAuthorized>
         </AuthorizeView>

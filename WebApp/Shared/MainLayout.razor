@@ -1,38 +1,38 @@
 ﻿@inherits LayoutComponentBase
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow position-sticky">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">超市管理系统</a>
     <div class="col-2">
         <LoginDisplay></LoginDisplay>
     </div>
 </header>
 
-<div class="container-fluid">
-    <div class="row">
-
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                        <span class="oi oi-home" aria-hidden="true"></span> 主页
-                    </NavLink>
-                    <NavLink class="nav-link" href="cashierconsole">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> 收银台
-                    </NavLink>
-                    <NavLink class="nav-link" href="transaction">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> 订单查询
-                    </NavLink>
-                    <NavLink class="nav-link" href="categories">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> 分类管理
-                    </NavLink>
-                    <NavLink class="nav-link" href="viewproducts">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> 产品管理
-                    </NavLink>
-                </ul>
-            </div>
-        </nav>
-
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 position-sticky">
-            @Body
-        </main>
-    </div>
+<div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> 主页
+                </NavLink>
+                <NavLink class="nav-link" href="cashierconsole">
+                    <span class="bi bi-shop" aria-hidden="true"></span> 收银台
+                </NavLink>
+                <NavLink class="nav-link" href="transaction">
+                    <span class="bi bi-card-list" aria-hidden="true"></span> 订单查询
+                </NavLink>
+                <NavLink class="nav-link" href="categories">
+                    <span class="bi bi-filter-left" aria-hidden="true"></span> 分类管理
+                </NavLink>
+                <NavLink class="nav-link" href="viewproducts">
+                    <span class="bi bi-projector" aria-hidden="true"></span> 产品管理
+                </NavLink>
+            </ul>
+        </div>
+    </nav>
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div class="my-4">
+        @Body
+        </div>
+    </main>
 </div>
+
